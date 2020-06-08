@@ -45,7 +45,8 @@ public class DepartmentListController implements Initializable{
 	
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		createDialogForm("/gui/DepartmentForm.fxml", parentStage);
+		Department obj = new Department();
+		createDialogForm(obj, "/gui/DepartmentForm.fxml", parentStage);
 	}
 	
 	@Override
@@ -74,10 +75,14 @@ public class DepartmentListController implements Initializable{
 		tableViewDepartment.setItems(obsList);;
 	}
 	
-	public void createDialogForm(String absolutName, Stage parentStage) {
+	public void createDialogForm(Department obj, String absolutName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutName));
 			Pane pane = loader.load();
+			
+			DepartmentFormController controller = loader.getController();
+			controller.setDepartment(obj);
+			controller.updateFormData();
 			
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Enter department data.");
@@ -88,8 +93,8 @@ public class DepartmentListController implements Initializable{
 			dialogStage.showAndWait();
 		}
 		catch(IOException e) {
-			//Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
-			System.out.println(e.getMessage());
+			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+		
 		}
 	}
 }
